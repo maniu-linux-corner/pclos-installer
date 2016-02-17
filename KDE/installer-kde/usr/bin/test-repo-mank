@@ -1,0 +1,60 @@
+#!/bin/sh
+
+
+arch=`getconf LONG_BIT`
+CSSKREPO="/etc/apt/sources.list.d/cs-sk.list"
+
+if [ ! -e $CSSKREPO ];then
+  cp /usr/share/pclinuxos/repo/cs-sk-$arch.list /etc/apt/sources.list.d
+  mv /etc/apt/sources.list.d/cs-sk-$arch.list /etc/apt/sources.list.d/cs-sk.list
+  rm -f /etc/rc.d/rc3.d/S99repo-mank /etc/rc.d/rc4.d/S99repo-mank /etc/rc.d/rc2.d/S99repo-mank /etc/rc.d/init.d/repo-mank /etc/rc.d/rc5.d/S99repo-mank
+  konsole --nofork --geometry 650x300+0+0 --profile installer --hide-menubar --hide-tabbar -e apt-get install apt-sources-list -y
+  konsole --nofork --geometry 650x300+0+0 --profile installer --hide-menubar --hide-tabbar -e apt-get update
+  export MAIN_DIALOG='
+
+  <window title="Proces kontroly repozitáře" window_position="1">
+  <vbox>
+    <frame>
+      <hbox>
+	<pixmap icon_size="6">
+	  <input file stock="gtk-info"></input>
+	</pixmap>
+	<text wrap="true" width-chars="25" use-markup="true">
+	  <label>"Komunitní CZ/SK repozitář byl přidán"</label>
+	</text>
+      </hbox>
+    </frame>
+
+    <hbox>
+      <button ok></button>
+    </hbox>
+  </vbox>
+  </window>
+  '
+  gtkdialog --program=MAIN_DIALOG
+
+  else
+  export MAIN_DIALOG='
+
+  <window title="Proces kontroly repozitáře" window_position="1">
+  <vbox>
+    <frame>
+      <hbox>
+	<pixmap icon_size="6">
+	  <input file stock="gtk-info"></input>
+	</pixmap>
+	<text wrap="true" width-chars="25" use-markup="true">
+	  <label>"Komunitní CZ/Sk repozitář je již ve vašem systému přidán"</label>
+	</text>
+      </hbox>
+    </frame>
+
+    <hbox>
+      <button ok></button>
+    </hbox>
+  </vbox>
+  </window>
+  '
+  gtkdialog --program=MAIN_DIALOG;
+fi
+exit 0
